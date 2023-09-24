@@ -32,7 +32,7 @@ namespace Ecommece_DaNang.Product
 
         public async Task<List<CateProducts>> GetCateProducts(string CateId)
         {
-            var product = await _context.Products.Where(x => x.CateId == CateId && x.IsDeleted == true).ToListAsync();
+            var product = await _context.Products.Include(x => x.ImageProducts).Where(x => x.CateId == CateId && x.IsDeleted == true).ToListAsync();
             var mapper = _mapper.Map<List<CateProducts>>(product);
             return mapper;
         }

@@ -117,7 +117,8 @@ namespace Ecommece_DaNang.UCard
                    ProductId = (int)g.ProductId,
                    quantityProduct = (int)g.product.Quantity,
                    PriceProduct = (int)Math.Round((decimal)(g.product.Price)),
-                   ImageProduct = g.product.ImageProducts.FirstOrDefault().Image
+                   ImageProduct = g.product.ImageProducts.FirstOrDefault().Image,
+                   Option = g.product.ProductOptions.FirstOrDefault().productOptionName
 
                })
                .ToListAsync();

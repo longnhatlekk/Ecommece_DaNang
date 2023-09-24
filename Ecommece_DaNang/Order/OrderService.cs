@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Ecommece_DaNang.Entity;
 using Ecommece_DaNang.Model;
+using Ecommece_DaNang.Payment;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Ecommece_DaNang.Order
 {
@@ -9,11 +11,15 @@ namespace Ecommece_DaNang.Order
     {
         private AppDbcontext _context;
         private IMapper _mapper;
+        private IConfiguration _config;
+        private IHttpContextAccessor _contextAccessor;
 
-        public OrderService(AppDbcontext context, IMapper mapper)
+        public OrderService(AppDbcontext context, IMapper mapper,IConfiguration config , IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _mapper = mapper;
+            _config = config;
+            _contextAccessor = contextAccessor;
         }
         public async Task<OrderResponse> CreateOrder(int userId, OrderModel model)
         {
@@ -97,7 +103,6 @@ namespace Ecommece_DaNang.Order
             var order = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == model.OrderId);
             if (order == null) throw new Exception("no order");
 
-            
             var payment = new Paymentt
             {
                 userID = order.UserId,
@@ -106,15 +111,39 @@ namespace Ecommece_DaNang.Order
                 Status = true,
                 Amount = order.TotalPrice,
             };
-           
+
             await _context.Payments.AddAsync(payment);
             await _context.SaveChangesAsync();
             order.Status = true;
             order.PaymentId = payment.PaymentId;
             await _context.SaveChangesAsync();
 
-            var mapper = _mapper.Map<OrderResponse>(order);
-            return mapper;
+            if (model.Method == "Cash")
+            {
+               
+                var mapper = _mapper.Map<OrderResponse>(order);
+                return mapper;
+            }else if(model.Method == "Vnpay")
+            {
+              
+                var vnPayService = new VnPayService(_config, _contextAccessor);
+                var paymentUrl = vnPayService.CreatePaymentUrl(payment);
+
+                return new OrderResponse { 
+                    OrderId = order.OrderId,
+                    PaymentId = payment.PaymentId,
+                    TotalPrice = order.TotalPrice,
+
+                PaymentUrl = paymentUrl
+                };
+
+            }
+            else
+            {
+                throw new Exception("No order");
+            }
+            
+            
         }
     }
 }

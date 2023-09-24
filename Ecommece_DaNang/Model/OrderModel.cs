@@ -2,7 +2,7 @@
 {
     public class OrderModel
     {
-        public IList<OrderdetailModel> Items { get; set; } = new List<OrderdetailModel>();  
+        public List<OrderdetailModel> Items { get; set; } = new List<OrderdetailModel>();  
         public string Note { get; set; }
     }
     public class OrderdetailModel
@@ -19,7 +19,8 @@
         public DateTime CreateOrder { get; set; }
         public int? PaymentId { get; set; }
         public int UserId { get; set; }
-        public  ICollection<OrderDetailRespone> Items { get; set; } = new List<OrderDetailRespone>();
+        public string PaymentUrl { get; set; }
+        public  List<OrderDetailRespone> Items { get; set; } = new List<OrderDetailRespone>();
     }
     public class OrderDetailRespone
     {
@@ -29,5 +30,9 @@
         public decimal Total { get; set; }
         public DateTime Orderdat { get; set; }
         public string Tofeedback { get; set; }
+    }
+    public class PaymentUrls
+    {
+        public string PaymentUrl { get; set; }
     }
 }

@@ -15,6 +15,8 @@
         public int PriceProduct { get; set; }
         public int quantityProduct { get; set; }
         public string ImageProduct { get; set; }
+
+        public string Option { get; set; }
     }
     public class Updatequantity
     {
