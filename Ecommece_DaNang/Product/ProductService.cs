@@ -47,7 +47,7 @@ namespace Ecommece_DaNang.Product
 
         public async Task<AllProductModel> getProducts(int productId)
         {
-            var product = _context.Products.Include(u=> u.ProductOptions)
+            var product = _context.Products.Include(u=> u.ProductOptions)    
                 .Include(u=>u.ImageProducts).Where(x=> x.IsDeleted == true)
                 .FirstOrDefault(Products => Products.ProductId == productId);
             var mapper = _mapper.Map<AllProductModel>(product);
