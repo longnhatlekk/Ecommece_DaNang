@@ -4,6 +4,7 @@
     {
         public int quantity { get; set; }
         public int ProductID { get; set; }
+        public int ProductOptionID { get; set; }
     }
     public class ViewCart
     {

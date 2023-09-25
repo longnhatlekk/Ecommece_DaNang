@@ -2,6 +2,7 @@
 using Ecommece_DaNang.Entity;
 using Ecommece_DaNang.Model;
 using Ecommece_DaNang.User.Response;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,7 +24,7 @@ namespace Ecommece_DaNang.User
         }
         public async Task<Token> Login(LoginModel login)
         {
-           var user = _context.Users.FirstOrDefault(x => x.Email == login.Email && x.Password == login.Password);
+           var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == login.Email && x.Password == login.Password);
             if(user == null) { throw new Exception("No user"); };
             var mapper = _mapper.Map<Users>(login);
             var token = await GenarateToken(user);

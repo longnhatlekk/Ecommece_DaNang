@@ -19,11 +19,13 @@ namespace Ecommece_DaNang.UCard
         public void Addtocard(CardModel card, int UserId)
         {
 
-            var product = _context.Products.FirstOrDefault(x => x.ProductId == card.ProductID);
-            if(product != null)
-            {
+            var product = _context.Products.Include(x => x.ProductOptions).FirstOrDefault(x => x.ProductId == card.ProductID);
+            if (product == null) throw new Exception("No product");
+            var selectOption = product.ProductOptions.FirstOrDefault(x => x.productOptionId == card.ProductOptionID);
+            if (selectOption == null) throw new Exception("No option product");
+          
                 var existingCartItem = _context.Cards.FirstOrDefault(c =>
-                      c.UserId == UserId && c.ProductId == card.ProductID);
+                      c.UserId == UserId && c.ProductId == card.ProductID && c.ProductOptionID == card.ProductOptionID);
                 if (existingCartItem != null)
                 {
                     if (card.quantity == 0)
@@ -38,7 +40,7 @@ namespace Ecommece_DaNang.UCard
                             existingCartItem.Quantity = product.Quantity;
                            throw new Exception ("Bạn đã có " + product.Quantity + " sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.");
                         }
-                        existingCartItem.Price += card.quantity * (int)Math.Round((decimal)(product.Price));
+                        existingCartItem.Price += card.quantity * selectOption.Price;
                     }
                 }
                 else
@@ -50,9 +52,10 @@ namespace Ecommece_DaNang.UCard
                             UserId = UserId,
                             ProductId = (int)card.ProductID,
                             Quantity = card.quantity,
-                            Price = card.quantity * (int)Math.Round((decimal)(product.Price)),
+                            Price = card.quantity * selectOption.Price,
                             
                         };
+                    newCartItem.ProductOptionID = card.ProductOptionID;
                         _context.Cards.Add(newCartItem);
                         _context.SaveChanges();
                     }
@@ -62,7 +65,7 @@ namespace Ecommece_DaNang.UCard
                         throw new Exception("Invalid quantity");
                     }
                 }
-            }
+            
 
         }
 
@@ -105,9 +108,12 @@ namespace Ecommece_DaNang.UCard
 
         public async Task<List<ViewCart>> ViewCard(int UserId)
         {
+            var selectcard = _context.Cards.FirstOrDefault();
             var viewCarts = await _context.Cards
                .Include(p => p.product)
-               .ThenInclude(p => p.ImageProducts)
+               .ThenInclude(x => x.ProductOptions)
+               
+               
                .Where(u => u.UserId == UserId && u.product.Quantity > 0)
 
                .Select(g => new ViewCart
@@ -115,10 +121,11 @@ namespace Ecommece_DaNang.UCard
                    CartId = g.CardId,
                    productName = g.product.ProductName,
                    ProductId = (int)g.ProductId,
+                   quantityCart = g.Quantity,
                    quantityProduct = (int)g.product.Quantity,
-                   PriceProduct = (int)Math.Round((decimal)(g.product.Price)),
+                   PriceProduct = (int)Math.Round((decimal)(g.product.ProductOptions.FirstOrDefault().Price)),
                    ImageProduct = g.product.ImageProducts.FirstOrDefault().Image,
-                   Option = g.product.ProductOptions.FirstOrDefault().productOptionName
+                   Option = g.product.ProductOptions.FirstOrDefault(x => x.productOptionId == selectcard.ProductOptionID).productOptionName,
 
                })
                .ToListAsync();

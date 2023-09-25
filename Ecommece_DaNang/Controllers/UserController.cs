@@ -19,7 +19,7 @@ namespace Ecommece_DaNang.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginModel login)
         {
-            var user = _service.Login(login);
+            var user = await _service.Login(login);
             return Ok(user);
         }
         [HttpPost("Logout")]
