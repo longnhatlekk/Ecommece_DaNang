@@ -44,6 +44,7 @@
         
         public string CateId { get; set; }
         public List<ImageProducts> ImageProducts { get; set; } = new List<ImageProducts>();
+        public List<ProductOptions> ProductOptions { get; set; } = new List<ProductOptions>();
     }
     public class ImageProducts
     {
