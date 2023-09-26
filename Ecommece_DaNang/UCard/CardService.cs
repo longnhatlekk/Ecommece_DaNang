@@ -22,10 +22,11 @@ namespace Ecommece_DaNang.UCard
             var product = _context.Products.Include(x => x.ProductOptions).FirstOrDefault(x => x.ProductId == card.ProductID);
             if (product == null) throw new Exception("No product");
             var selectOption = product.ProductOptions.FirstOrDefault(x => x.productOptionId == card.ProductOptionID);
+            var selectImage = product.ImageProducts.FirstOrDefault(x => x.ImageId == card.ImageId);
             if (selectOption == null) throw new Exception("No option product");
           
                 var existingCartItem = _context.Cards.FirstOrDefault(c =>
-                      c.UserId == UserId && c.ProductId == card.ProductID && c.ProductOptionID == card.ProductOptionID);
+                      c.UserId == UserId && c.ProductId == card.ProductID && c.ProductOptionID == card.ProductOptionID && card.ImageId == c.ImageId);
                 if (existingCartItem != null)
                 {
                     if (card.quantity == 0)
@@ -56,6 +57,7 @@ namespace Ecommece_DaNang.UCard
                             
                         };
                     newCartItem.ProductOptionID = card.ProductOptionID;
+                    newCartItem.ImageId = card.ImageId;
                         _context.Cards.Add(newCartItem);
                         _context.SaveChanges();
                     }
@@ -78,6 +80,7 @@ namespace Ecommece_DaNang.UCard
             {
 
                 var product = _context.Products.FirstOrDefault(p => p.ProductId == cartItem.ProductId);
+                var selectoption = _context.productoptions.FirstOrDefault(x => x.productOptionId == cartItem.ProductOptionID);
                 if (update.quantity != -1 && update.quantity != 1)
                 {
                     cartItem.Quantity = update.quantity;
@@ -87,7 +90,7 @@ namespace Ecommece_DaNang.UCard
                     cartItem.Quantity += update.quantity;
                 }
 
-                cartItem.Price = (int)Math.Round((decimal)(product.Price * cartItem.Quantity));
+                cartItem.Price = (int)Math.Round((decimal)(selectoption.Price * cartItem.Quantity));
                 if (cartItem.Quantity > product.Quantity)
                 {
                     cartItem.Quantity = product.Quantity;
@@ -108,12 +111,11 @@ namespace Ecommece_DaNang.UCard
 
         public async Task<List<ViewCart>> ViewCard(int UserId)
         {
-            var selectcard = _context.Cards.FirstOrDefault();
+            
             var viewCarts = await _context.Cards
                .Include(p => p.product)
-               .ThenInclude(x => x.ProductOptions)
-               
-               
+               .Include(x => x.ImageProducts)
+               .Include(x => x.ProductOptions)                             
                .Where(u => u.UserId == UserId && u.product.Quantity > 0)
 
                .Select(g => new ViewCart
@@ -121,11 +123,16 @@ namespace Ecommece_DaNang.UCard
                    CartId = g.CardId,
                    productName = g.product.ProductName,
                    ProductId = (int)g.ProductId,
+                   PriceCart = g.Price,
                    quantityCart = g.Quantity,
                    quantityProduct = (int)g.product.Quantity,
-                   PriceProduct = (int)Math.Round((decimal)(g.product.ProductOptions.FirstOrDefault().Price)),
-                   ImageProduct = g.product.ImageProducts.FirstOrDefault().Image,
-                   Option = g.product.ProductOptions.FirstOrDefault(x => x.productOptionId == selectcard.ProductOptionID).productOptionName,
+                   imageproduct = g.ImageProducts.Image,
+                   Color = g.ImageProducts.Color,
+
+                   PriceProduct = (int) g.ProductOptions.Price,
+                   Option = g.ProductOptions.productOptionName
+                   
+                   
 
                })
                .ToListAsync();

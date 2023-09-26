@@ -65,6 +65,14 @@ namespace Ecommece_DaNang.Entity
                 entity.HasOne(u => u.product)
                 .WithMany(u => u.card)
                 .HasForeignKey(e => e.ProductId);
+                entity.HasOne(u => u.ProductOptions)
+                .WithMany(u => u.cards)
+                .HasForeignKey(e => e.ProductOptionID).
+                OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne(x => x.ImageProducts)
+                .WithMany(x => x.cards)
+                .HasForeignKey(x => x.ImageId).
+                OnDelete(DeleteBehavior.NoAction);
 
             });
             modelBuilder.Entity<Products>(entity =>

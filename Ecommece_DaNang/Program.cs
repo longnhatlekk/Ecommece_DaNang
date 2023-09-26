@@ -3,6 +3,7 @@ using Ecommece_DaNang.Order;
 using Ecommece_DaNang.Product;
 using Ecommece_DaNang.UAdmin;
 using Ecommece_DaNang.UCard;
+using Ecommece_DaNang.UCustomer;
 using Ecommece_DaNang.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -29,6 +30,7 @@ builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<AppDbcontext>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddSingleton<IHttpContextAccessor , HttpContextAccessor>();
 builder.Services.AddAuthentication(option =>
 {

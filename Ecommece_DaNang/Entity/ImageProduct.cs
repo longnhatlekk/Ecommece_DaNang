@@ -7,5 +7,6 @@
         public string Image { get; set; }
         public int ProductId { get; set; }
         public Products Products { get; set; }
+        public ICollection<Card> cards { get; set; } = new List<Card>();
     }
 }

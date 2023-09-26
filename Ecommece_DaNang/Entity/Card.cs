@@ -8,6 +8,9 @@
         public int UserId { get; set; }
         public int ProductId { get; set; }
         public int ProductOptionID { get; set; }
+        public int ImageId { get; set; }
+       public ImageProduct ImageProducts { get; set; }
+        public ProductOption ProductOptions { get; set; }
         public Products product { get; set; }
         public Users user { get; set; }
     }

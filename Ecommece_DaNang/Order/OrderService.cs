@@ -37,7 +37,7 @@ namespace Ecommece_DaNang.Order
                 var quantity = option.Quantity;
                 var productId = option.ProductId;
                 var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
-
+                var selectOption = product.ProductOptions.FirstOrDefault();
                 if (product == null)
                 {
                     throw new Exception("Product not found");

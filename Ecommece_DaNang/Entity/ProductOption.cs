@@ -7,5 +7,6 @@
         public decimal Price { get; set; }
         public int ProductId { get; set; }
         public Products products { get; set; }
+        public ICollection<Card> cards { get; set; } = new List<Card>();
     }
 }

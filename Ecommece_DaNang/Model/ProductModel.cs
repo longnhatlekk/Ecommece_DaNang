@@ -48,6 +48,7 @@
     }
     public class ImageProducts
     {
+        public int ImageId { get; set; }
         public string Color { get; set; }
         public string Image { get; set; }
     }
