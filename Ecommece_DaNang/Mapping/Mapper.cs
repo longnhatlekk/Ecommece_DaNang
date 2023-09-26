@@ -23,11 +23,13 @@ namespace Ecommece_DaNang.Mapping
             CreateMap<ImageProduct, AddImageProduct>().ReverseMap();
             CreateMap<Products, UpdateProduct>().ReverseMap();
             CreateMap<Products, HotProduct>().ReverseMap();
-            CreateMap<Orders, OrderResponse>().ReverseMap();
-               
-            CreateMap<OrderDetail,OrderDetailRespone>().ReverseMap();
-            
-                
+            CreateMap<Orders, OrderResponse>()
+    .ForMember(dest => dest.Itemss, opt => opt.MapFrom(src => src.OrderDetails))
+    .ReverseMap();
+
+            CreateMap<OrderDetail, OrderDetailRespone>().ReverseMap();
+
+
         }
     }
 }

@@ -28,16 +28,17 @@ namespace Ecommece_DaNang.Order
             {
                 throw new Exception("User not found");
             }
-
+            
             var items = new List<OrderDetail>();
             decimal totalPrice = 0;
-
+            
             foreach (var option in model.Items)
             {
                 var quantity = option.Quantity;
                 var productId = option.ProductId;
-                var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
-                var selectOption = product.ProductOptions.FirstOrDefault();
+                var productoptionid = option.productOptionId;
+                var product = await _context.Products.Include(x => x.ProductOptions).FirstOrDefaultAsync(x => x.ProductId == productId);
+                var selectoption = product.ProductOptions.FirstOrDefault(x => x.productOptionId == productoptionid);
                 if (product == null)
                 {
                     throw new Exception("Product not found");
@@ -53,9 +54,10 @@ namespace Ecommece_DaNang.Order
                     ProductId = productId,
                     Quantity = quantity,
                     Orderdat = DateTime.UtcNow,
-                    PriceProduct = product.SoldPrice,
+                    PriceProduct = selectoption.Price,
                     Tofeedback = "Good",
-                    Total = quantity * product.SoldPrice
+                    Total = quantity * selectoption.Price,
+                    productOptionId = productoptionid,
                 };
 
                

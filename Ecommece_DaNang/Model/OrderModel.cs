@@ -21,7 +21,7 @@
         public int? PaymentId { get; set; }
         public int UserId { get; set; }
         public string PaymentUrl { get; set; }
-        public  List<OrderDetailRespone> Items { get; set; } = new List<OrderDetailRespone>();
+        public  List<OrderDetailRespone> Itemss { get; set; } = new List<OrderDetailRespone>();
     }
     public class OrderDetailRespone
     {
