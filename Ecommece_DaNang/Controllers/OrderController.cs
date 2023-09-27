@@ -37,5 +37,15 @@ namespace Ecommece_DaNang.Controllers
             return Ok(order);
 
         }
+        [HttpGet("get-order-success")]
+        public async Task<IActionResult> getordersuccess()
+        {
+            var user = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            if (user == null) return BadRequest("invalid user");
+            int userId = int.Parse(user.Value);
+            var getorder = await _orderservice.GetOrderSuccess(userId);
+            return Ok(getorder);
+        }
+        
     }
 }

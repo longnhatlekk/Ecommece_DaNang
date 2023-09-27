@@ -67,12 +67,12 @@ namespace Ecommece_DaNang.Entity
                 .HasForeignKey(e => e.ProductId);
                 entity.HasOne(u => u.ProductOptions)
                 .WithMany(u => u.cards)
-                .HasForeignKey(e => e.ProductOptionID).
-                OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(e => e.ProductOptionID)
+                .OnDelete(DeleteBehavior.NoAction);
                 entity.HasOne(x => x.ImageProducts)
                 .WithMany(x => x.cards)
-                .HasForeignKey(x => x.ImageId).
-                OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(x => x.ImageId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             });
             modelBuilder.Entity<Products>(entity =>
@@ -117,6 +117,20 @@ namespace Ecommece_DaNang.Entity
                 entity.HasOne(u => u.Orders)
                 .WithMany(u => u.OrderDetails)
                 .HasForeignKey(e => e.OrderId);
+
+                entity.HasOne(x => x.imageProduct)
+                .WithMany(x => x.orderDetails)
+                .HasForeignKey(x => x.ImageId)
+                .OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne(u => u.productOption)
+               .WithMany(u => u.orderDetails)
+               .HasForeignKey(e => e.ProductOptionID)
+               .OnDelete(DeleteBehavior.NoAction);
+
+
+
+                
+
             });
             modelBuilder.Entity<Role>().HasData(new Role
             {

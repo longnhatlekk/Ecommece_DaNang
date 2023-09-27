@@ -124,6 +124,7 @@ namespace Ecommece_DaNang.UCard
                    productName = g.product.ProductName,
                    ProductId = (int)g.ProductId,
                    PriceCart = g.Price,
+                  
                    quantityCart = g.Quantity,
                    quantityProduct = (int)g.product.Quantity,
                    imageproduct = g.ImageProducts.Image,

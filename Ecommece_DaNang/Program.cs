@@ -59,7 +59,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("Dbcontext");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

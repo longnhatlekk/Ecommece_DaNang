@@ -36,9 +36,11 @@ namespace Ecommece_DaNang.Order
             {
                 var quantity = option.Quantity;
                 var productId = option.ProductId;
-                var productoptionid = option.productOptionId;
+                var productoptionid = option.ProductOptionID;
+                var imageID = option.ImageId;
                 var product = await _context.Products.Include(x => x.ProductOptions).FirstOrDefaultAsync(x => x.ProductId == productId);
                 var selectoption = product.ProductOptions.FirstOrDefault(x => x.productOptionId == productoptionid);
+                var selectImageID = product.ImageProducts.FirstOrDefault(x => x.ImageId == imageID);
                 if (product == null)
                 {
                     throw new Exception("Product not found");
@@ -57,7 +59,8 @@ namespace Ecommece_DaNang.Order
                     PriceProduct = selectoption.Price,
                     Tofeedback = "Good",
                     Total = quantity * selectoption.Price,
-                    productOptionId = productoptionid,
+                    ProductOptionID = productoptionid,
+                    ImageId = imageID
                 };
 
                
@@ -98,6 +101,33 @@ namespace Ecommece_DaNang.Order
                 .FirstOrDefaultAsync(x => x.OrderId == orderId);
             return order;
         }
+
+        public async Task<List<OrderSuccess>> GetOrderSuccess(int userId)
+        {
+            var orderDetails = await _context.OrderDetails
+         .Where(od => od.Orders.UserId == userId && od.Orders.Status == true)
+         .Include(od => od.Orders)
+             .ThenInclude(order => order.Userss)
+         .Include(od => od.imageProduct)
+             .ThenInclude(ip => ip.Products)
+         .Include(od => od.productOption)
+         .ToListAsync();
+
+            var orderSuccessList = orderDetails.Select(orderDetail => new OrderSuccess
+            {
+                OrderId = orderDetail.Orders.OrderId,
+                Note = orderDetail.Orders.Note,
+                TotalPrice = orderDetail.Orders.TotalPrice,
+                CreateOrder = orderDetail.Orders.CreateOrder,
+                Image = orderDetail.imageProduct.Image, // Thay 'Image' bằng tên thuộc tính ảnh của sản phẩm
+                ProductOptionName = orderDetail.productOption.productOptionName,
+                ProductOption = orderDetail.PriceProduct, // Sử dụng thuộc tính 'PriceProduct' của OrderDetail
+                ProductName = orderDetail.Products.ProductName
+            }).ToList();
+
+            return orderSuccessList;
+        }
+
 
         public async Task<OrderResponse> Payment(PaymentModel model)
 

@@ -9,7 +9,8 @@
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-        public int productOptionId { get; set; }
+        public int ImageId { get; set; }
+        public int ProductOptionID { get; set; }
     }
     public class OrderResponse
     {
@@ -31,9 +32,22 @@
         public decimal Total { get; set; }
         public DateTime Orderdat { get; set; }
         public string Tofeedback { get; set; }
+        public int ImageId { get; set; }
+        public int ProductOptionID { get; set; }
     }
     public class PaymentUrls
     {
         public string PaymentUrl { get; set; }
+    }
+    public class OrderSuccess
+    {
+        public int OrderId { get; set; }
+        public string Note { get; set; }
+        public decimal TotalPrice { get; set; }
+        public DateTime CreateOrder { get; set; }
+        public string Image { get; set; }
+        public string ProductOptionName { get; set; }
+        public decimal ProductOption { get; set; }
+        public string ProductName { get; set; }                
     }
 }

@@ -346,6 +346,9 @@ namespace Ecommece_DaNang.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
 
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
+
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
@@ -358,6 +361,9 @@ namespace Ecommece_DaNang.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ProductOptionID")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -368,14 +374,15 @@ namespace Ecommece_DaNang.Migrations
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("productOptionId")
-                        .HasColumnType("int");
-
                     b.HasKey("OrderDetailId");
+
+                    b.HasIndex("ImageId");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductOptionID");
 
                     b.ToTable("OrderDetail", (string)null);
                 });
@@ -1073,6 +1080,12 @@ namespace Ecommece_DaNang.Migrations
 
             modelBuilder.Entity("Ecommece_DaNang.Entity.OrderDetail", b =>
                 {
+                    b.HasOne("Ecommece_DaNang.Entity.ImageProduct", "imageProduct")
+                        .WithMany("orderDetails")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Ecommece_DaNang.Entity.Orders", "Orders")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
@@ -1085,9 +1098,19 @@ namespace Ecommece_DaNang.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Ecommece_DaNang.Entity.ProductOption", "productOption")
+                        .WithMany("orderDetails")
+                        .HasForeignKey("ProductOptionID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Orders");
 
                     b.Navigation("Products");
+
+                    b.Navigation("imageProduct");
+
+                    b.Navigation("productOption");
                 });
 
             modelBuilder.Entity("Ecommece_DaNang.Entity.Orders", b =>
@@ -1160,6 +1183,8 @@ namespace Ecommece_DaNang.Migrations
             modelBuilder.Entity("Ecommece_DaNang.Entity.ImageProduct", b =>
                 {
                     b.Navigation("cards");
+
+                    b.Navigation("orderDetails");
                 });
 
             modelBuilder.Entity("Ecommece_DaNang.Entity.Orders", b =>
@@ -1175,6 +1200,8 @@ namespace Ecommece_DaNang.Migrations
             modelBuilder.Entity("Ecommece_DaNang.Entity.ProductOption", b =>
                 {
                     b.Navigation("cards");
+
+                    b.Navigation("orderDetails");
                 });
 
             modelBuilder.Entity("Ecommece_DaNang.Entity.Products", b =>

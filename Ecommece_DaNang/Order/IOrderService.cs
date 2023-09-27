@@ -8,5 +8,6 @@ namespace Ecommece_DaNang.Order
         public Task<OrderResponse> CreateOrder(int userId, OrderModel model);
         public Task<OrderResponse> Payment(PaymentModel model);
         public Task<Orders> GetOrder(int orderId);
+        public Task<List<OrderSuccess>> GetOrderSuccess(int UserId);
     }
 }

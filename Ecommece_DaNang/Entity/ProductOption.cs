@@ -8,5 +8,6 @@
         public int ProductId { get; set; }
         public Products products { get; set; }
         public ICollection<Card> cards { get; set; } = new List<Card>();
+        public ICollection<OrderDetail> orderDetails { get; set; } = new List<OrderDetail>();
     }
 }
