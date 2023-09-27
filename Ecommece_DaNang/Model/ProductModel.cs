@@ -13,6 +13,19 @@
 
 
     }
+    public class SearchProduct
+    {
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
+        public string Description { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public decimal Discount { get; set; }
+        public decimal SoldPrice { get; set; }
+        public List<ImageProducts> ImageProducts { get; set; } = new List<ImageProducts>();
+        public List<ProductOptions> ProductOptions { get; set; } = new List<ProductOptions>();
+
+    }
     public class ProductOptions
     {
         public int productOptionId { get; set; }

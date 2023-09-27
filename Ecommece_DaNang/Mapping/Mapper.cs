@@ -28,6 +28,7 @@ namespace Ecommece_DaNang.Mapping
     .ReverseMap();
 
             CreateMap<OrderDetail, OrderDetailRespone>().ReverseMap();
+            CreateMap<Products, SearchProduct>().ReverseMap();
 
 
         }

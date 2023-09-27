@@ -54,11 +54,12 @@ namespace Ecommece_DaNang.Product
             return mapper;
         }
 
-        public async Task<List<ProductModel>> SearchProduct(string ProductName)
+        public async Task<List<SearchProduct>> SearchProduct(string ProductName)
         {
             var product = await _context.Products.Include(x => x.ImageProducts)
+                .Include(x => x.ProductOptions)
                 .Where(x => x.ProductName.Contains(ProductName) && x.IsDeleted == true).ToListAsync();
-            var mapper = _mapper.Map<List<ProductModel>>(product);
+            var mapper = _mapper.Map<List<SearchProduct>>(product);
             return mapper;
         }
     }
