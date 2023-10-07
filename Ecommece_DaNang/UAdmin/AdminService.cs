@@ -53,11 +53,33 @@ namespace Ecommece_DaNang.UAdmin
             _context.SaveChanges();
         }
 
+        public async Task<decimal> ageMoney1week()
+        {
+            var currentDate = DateTime.Now;
+            var startOfWeek = currentDate.AddDays(-(int)currentDate.DayOfWeek); // Điểm bắt đầu của tuần
+            var endOfWeek = startOfWeek.AddDays(6); // Điểm cuối của tuần
+
+            decimal totalMoneyThisWeek = _context.Orders
+                .Where(t => t.CreateOrder >= startOfWeek && t.CreateOrder <= endOfWeek && t.Status == true)
+                .Sum(t => t.TotalPrice);           
+            return totalMoneyThisWeek;
+        }
+
+        public async Task<decimal> ageMoney1year()
+        {
+            DateTime oneyear = DateTime.Now;
+            var totalmoney = await _context.Orders
+                .Where(x => x.CreateOrder.Year == oneyear.Year && x.Status == true).ToListAsync();
+            var money = totalmoney.Sum(x => x.TotalPrice);
+            return money;
+        }
+
         public async Task<decimal> argMoney1day()
         {
 
             DateTime now = DateTime.Now;
-            var money = _context.Orders.Where(x => x.CreateOrder.Month == now.Month && x.CreateOrder.Year == now.Year).ToList();
+            var money = await _context.Orders.Where(x => x.CreateOrder.Month == now.Month && x.CreateOrder.Year == now.Year && x.Status == true).ToListAsync();
+            if (money.Count == 0) return 0;
             var totalmoney = money.GroupBy(x => x.CreateOrder.Day)
                 .Select(a => new 
                 {
@@ -81,14 +103,14 @@ namespace Ecommece_DaNang.UAdmin
 
         public async Task<decimal> GettotalMoney()
         {
-            var money = await _context.Orders.SumAsync(x => x.TotalPrice);
+            var money = await _context.Orders.Where(x => x.Status == true).SumAsync(x => x.TotalPrice);
             return money;
         }
 
         public async Task<decimal> GettotalMoney1Month()
         {
             DateTime now = DateTime.Now;
-            var money = _context.Orders.Where(x => x.CreateOrder.Month == now.Month && x.CreateOrder.Year == now.Year).ToList();
+            var money = await _context.Orders.Where(x => x.CreateOrder.Month == now.Month && x.CreateOrder.Year == now.Year && x.Status == true).ToListAsync();
             var totalmoney = money.Sum(x => x.TotalPrice);
             return totalmoney;
         }

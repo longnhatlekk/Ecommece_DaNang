@@ -1,5 +1,6 @@
 ﻿using Ecommece_DaNang.Model;
 using Ecommece_DaNang.UAdmin;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace Ecommece_DaNang.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="AD")]
     public class AdminController : ControllerBase
     {
         private IAdminService _adminservice;
@@ -50,6 +52,18 @@ namespace Ecommece_DaNang.Controllers
         public async Task<IActionResult > gettotalmoney1day()
         {
             var money = await _adminservice.argMoney1day();
+            return Ok(money);
+        }
+        [HttpGet("get-totalmoney-year")]
+        public async Task<IActionResult> GettotalMoneyYear()
+        {
+            var money = await _adminservice.ageMoney1year();
+            return Ok(money);
+        }
+        [HttpGet("get-totalmoney-oneweek")]
+        public async Task<IActionResult> GetTotalMoneyoneWeek()
+        {
+            var money = await _adminservice.ageMoney1week();
             return Ok(money);
         }
     }

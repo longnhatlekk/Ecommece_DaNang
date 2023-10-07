@@ -1,5 +1,6 @@
 ﻿using Ecommece_DaNang.Model;
 using Ecommece_DaNang.UCard;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace Ecommece_DaNang.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Policy = "Dbcontext")]
     public class CardController : ControllerBase
     {
         private ICardService _service;
@@ -25,7 +27,7 @@ namespace Ecommece_DaNang.Controllers
                 if (user == null) return BadRequest("Invalid token");
                 int userId = int.Parse(user.Value);
                 _service.Addtocard(model, userId);
-                return Ok("Add to card sucess");
+                return Ok(model);
             }catch(Exception ex)
             {
                 throw new Exception(ex.Message);
@@ -41,6 +43,7 @@ namespace Ecommece_DaNang.Controllers
             _service.updateCard(update, userId);
             return Ok("Update success");
         }
+        [Authorize(Policy ="Dbcontext")]
         [HttpGet("ViewCard")]
         public async Task<IActionResult> viewcard()
         {

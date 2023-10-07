@@ -10,5 +10,8 @@ namespace Ecommece_DaNang.UAdmin
         public Task<decimal> GettotalMoney();
         public Task<decimal> GettotalMoney1Month();
         public Task<decimal> argMoney1day();
+        public Task<decimal> ageMoney1week();
+        public Task<decimal> ageMoney1year();
+
     }
 }

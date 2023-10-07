@@ -21,8 +21,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(option => option.AddPolicy("Dbcontext", build =>
 {
+    
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
+builder.Services.AddAuthorization(option =>
+{
+    option.AddPolicy("Dbcontext", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+
+    });
+});
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
