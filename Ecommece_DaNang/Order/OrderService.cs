@@ -4,6 +4,8 @@ using Ecommece_DaNang.Model;
 using Ecommece_DaNang.Payment;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System.Transactions;
 
 namespace Ecommece_DaNang.Order
 {
@@ -160,7 +162,7 @@ namespace Ecommece_DaNang.Order
               
                 var vnPayService = new VnPayService(_config, _contextAccessor);
                 var paymentUrl = vnPayService.CreatePaymentUrl(payment);
-                
+               
                 return new OrderResponse { 
                     OrderId = order.OrderId,
                     PaymentId = payment.PaymentId,
