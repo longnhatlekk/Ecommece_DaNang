@@ -29,25 +29,33 @@ namespace Ecommece_DaNang.UAdmin
             // Thêm tùy chọn sản phẩm
             foreach (var option in model.updateProductOptions)
             {
-                var productOption = new ProductOption
-                {
-                    ProductId = productId,
-                    productOptionName = option.productOptionName,
-                    Price = option.Price
-                };
-                _context.productoptions.Add(productOption);
-            }
+                var existingOption = _context.productoptions.FirstOrDefault(
+              o => o.ProductId == productId && o.productOptionName == option.productOptionName);
 
-            // Thêm hình ảnh sản phẩm
+                if (existingOption == null)
+                {                  
+                    var productOption = new ProductOption
+                    {
+                        ProductId = productId,
+                        productOptionName = option.productOptionName,
+                        Price = option.Price
+                    };
+                    _context.productoptions.Add(productOption);
+                }
+            }      
             foreach (var image in model.ImageProducts)
             {
-                var imageProduct = new ImageProduct
+                var existingImage = _context.ImageProducts.Any(img => img.ProductId == productId && img.Image == image.Image);
+                if (existingImage == null)
                 {
-                    ProductId = productId,
-                    Color = image.Color,
-                    Image = image.Image
-                };
-                _context.ImageProducts.Add(imageProduct);
+                    var imageProduct = new ImageProduct
+                    {
+                        ProductId = productId,
+                        Color = image.Color,
+                        Image = image.Image
+                    };
+                    _context.ImageProducts.Add(imageProduct);
+                }
             }
 
             _context.SaveChanges();

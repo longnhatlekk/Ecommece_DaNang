@@ -8,7 +8,7 @@ namespace Ecommece_DaNang.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="AD")]
+    //[Authorize(Roles ="AD")]
     public class AdminController : ControllerBase
     {
         private IAdminService _adminservice;
