@@ -1,5 +1,6 @@
 ﻿using Ecommece_DaNang.Model;
 using Ecommece_DaNang.User;
+using Ecommece_DaNang.User.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,18 @@ namespace Ecommece_DaNang.Controllers
             _service.Register(register);
             return Ok(register);
         }
-            
+        [HttpGet("get-all-user")]
+        public async Task<IActionResult> getallUser()
+        {
+            var user = await _service.getallUser();
+            return Ok(user);
+        }
+
+        [HttpPost("renew-token")]
+        public async Task<IActionResult> renewToken(RenewToken token)
+        {
+            var renew = _service.RenewToken(token);
+            return Ok(renew);
+        }
     }
 }

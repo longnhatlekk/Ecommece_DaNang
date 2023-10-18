@@ -24,4 +24,13 @@
         public string NewPassword { get; set; }
         public string ConfirmNewPassword { get; set; }
     }
+    public class GetAllUser
+    {
+        public int UserId { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+      
+        public DateTime Birthday { get; set; }
+        public string Gender { get; set; }
+    }
 }

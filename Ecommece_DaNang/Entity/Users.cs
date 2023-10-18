@@ -15,5 +15,6 @@ namespace Ecommece_DaNang.Entity
         public ICollection<Card> card { get; set; }
         public ICollection<Paymentt> Payments { get; set; } = new List<Paymentt>();
         public List<Orders> Orders { get; set; } = new List<Orders>();
+        public ICollection<RefreshToken> refreshTokens = new List<RefreshToken>();
     }
 }

@@ -16,6 +16,7 @@ namespace Ecommece_DaNang.Entity
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Paymentt> Payments { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -163,6 +164,14 @@ namespace Ecommece_DaNang.Entity
                 .WithMany(u => u.Payments)
                 .HasForeignKey(e => e.userID);
 
+            });
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.ToTable("RefreshToken");
+                entity.HasKey(e => e.Id);
+                entity.HasOne(u => u.User)
+                .WithMany(u => u.refreshTokens)
+                .HasForeignKey(e => e.UserId);
             });
 
             
